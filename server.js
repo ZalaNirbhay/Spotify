@@ -1,4 +1,7 @@
 const app=require('./src/app');
+const connectDb=require('./db/db');
+
+connectDb();
 
 
 app.listen(3000,()=>{
