@@ -1,8 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const userModel = require("./models/user.model");
-
+const authRoutes = require("./routes/auth.routes");
 const app = express();
 
 app.use(express.json());
@@ -19,32 +18,9 @@ app.use((req, res, nxt) => {
   nxt();
 });
 
-app.post("/registerUser", (req, res) => {
-  const { username, email, password, role } = req.body;
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
-  const newUser = new userModel({
-    username,
-    email,
-    password,
-    role,
-  });
-  newUser
-    .save()
-    .then((user) => {
-      res.status(201).json({ message: "User registered successfully", user });
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .json({ message: "Error registering user", error: err.message });
-    });
-});
+app.use("/api/auth", authRoutes);
 
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the User Management API');
-});
+
 
 module.exports = app;
