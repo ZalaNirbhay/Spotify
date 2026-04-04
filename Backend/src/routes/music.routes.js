@@ -8,7 +8,7 @@ const upload=multer({
  
 router.post("/upload",upload.single('music'),musoicController.createMusic);
 
-
+router.post("/createAlbum",musoicController.createAlbum);
 
 
 
