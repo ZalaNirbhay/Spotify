@@ -1,59 +1,123 @@
 import { useState } from 'react'
-import AuthCard from '../../components/auth/AuthCard'
 
 const LoginPage = ({ onSwitchToRegister }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
 
   const handleChange = (event) => {
     const { name, value } = event.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
+
+    try {
+      setLoading(true)
+      setMessage('')
+
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        setMessage(data?.message || 'Login failed')
+        return
+      }
+
+      setMessage('Login successful')
+    } catch {
+      setMessage('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <AuthCard
-      title="Welcome back"
-      subtitle="Log in and continue your music journey."
-      ctaLabel="Log in"
-      altText="New here?"
-      altActionLabel="Create account"
-      onAltAction={onSwitchToRegister}
-      onSubmit={handleSubmit}
-    >
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm text-slate-200">Email</span>
-        <input
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          type="email"
-          placeholder="you@example.com"
-          autoComplete="email"
-          className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-400 focus:-translate-y-0.5 focus:border-emerald-400/70"
-          required
-        />
-      </label>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_15%_15%,rgba(30,215,96,0.24),transparent_40%),radial-gradient(circle_at_85%_85%,rgba(20,184,166,0.22),transparent_38%),linear-gradient(155deg,#05080f,#101a2b)] px-4 py-8 text-slate-100">
+      <section className="grid w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/20 shadow-[0_28px_90px_rgba(3,8,21,0.55)] backdrop-blur md:grid-cols-[1.1fr_1fr]">
+        <div className="relative flex flex-col justify-center gap-4 bg-[linear-gradient(145deg,rgba(30,215,96,0.28),rgba(9,14,25,0.95))] p-9">
+          <div className="w-fit rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-widest">
+            PulseWave
+          </div>
+          <h1 className="font-['Space_Grotesk'] text-4xl font-bold tracking-tight md:text-5xl">
+            Feel every beat.
+          </h1>
+          <p className="max-w-sm text-sm leading-relaxed text-slate-300">
+            Stream music with clarity, discover new artists, and keep your vibe alive all day.
+          </p>
+          <div className="pointer-events-none absolute -bottom-14 -right-10 h-56 w-56 bg-[radial-gradient(circle,rgba(30,215,96,0.58),rgba(20,184,166,0))] blur-lg" />
+        </div>
 
-      <label className="flex flex-col gap-1.5">
-        <span className="text-sm text-slate-200">Password</span>
-        <input
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          type="password"
-          placeholder="Enter your password"
-          autoComplete="current-password"
-          className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-400 focus:-translate-y-0.5 focus:border-emerald-400/70"
-          required
-        />
-      </label>
-    </AuthCard>
+        <div className="flex flex-col gap-6 bg-[rgba(12,19,33,0.82)] p-8 md:p-10">
+          <header>
+            <h2 className="text-3xl font-bold text-slate-100">Welcome back</h2>
+            <p className="mt-2 text-sm text-slate-300">Log in and continue your music journey.</p>
+          </header>
+
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm text-slate-200">Email</span>
+              <input
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                type="email"
+                placeholder="you@example.com"
+                autoComplete="email"
+                className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-400 focus:-translate-y-0.5 focus:border-emerald-400/70"
+                required
+              />
+            </label>
+
+            <label className="flex flex-col gap-1.5">
+              <span className="text-sm text-slate-200">Password</span>
+              <input
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                type="password"
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-400 focus:-translate-y-0.5 focus:border-emerald-400/70"
+                required
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="rounded-xl bg-[linear-gradient(90deg,#1ed760,#14b8a6)] px-4 py-3 text-base font-bold text-emerald-950 transition duration-200 hover:-translate-y-0.5 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {loading ? 'Logging in...' : 'Log in'}
+            </button>
+          </form>
+
+          {message && <p className="text-sm text-slate-300">{message}</p>}
+
+          <p className="text-sm text-slate-300">
+            New here?{' '}
+            <button
+              type="button"
+              onClick={onSwitchToRegister}
+              className="font-semibold text-emerald-400 transition hover:text-emerald-300"
+            >
+              Create account
+            </button>
+          </p>
+        </div>
+      </section>
+    </main>
   )
 }
 
