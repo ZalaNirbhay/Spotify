@@ -1,11 +1,15 @@
-import React from 'react'
+import { useState } from 'react'
+import LoginPage from './pages/auth/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
 
 const App = () => {
-  return (
-    <div className='flex items-center justify-center translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2 absolute'>
-      <h1 className='text-2xl font-bold text-center  transl p-4 rounded-lg'>hello world this is nirbhay testing tailwind css configuration in react project</h1>
-    </div>
-  )
+  const [authMode, setAuthMode] = useState('login')
+
+  if (authMode === 'register') {
+    return <RegisterPage onSwitchToLogin={() => setAuthMode('login')} />
+  }
+
+  return <LoginPage onSwitchToRegister={() => setAuthMode('register')} />
 }
 
 export default App
