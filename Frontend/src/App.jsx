@@ -1,11 +1,48 @@
-import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
+import HomePage from './pages/HomePage';
+import AllMusic from './pages/AllMusic';
+import Navbar from './components/layout/Navbar';
+
+const ProtectedRoute = ({ children }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 const App = () => {
   return (
-    <div className='flex items-center justify-center translate-x-[-50%] translate-y-[-50%] top-1/2 left-1/2 absolute'>
-      <h1 className='text-2xl font-bold text-center  transl p-4 rounded-lg'>hello world this is nirbhay testing tailwind css configuration in react project</h1>
+    <div className="bg-[#05080f] min-h-screen text-white flex flex-col">
+      <Navbar />
+      <main className="flex-1 w-full max-w-6xl mx-auto">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          <Route 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <HomePage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/music" 
+            element={
+              <ProtectedRoute>
+                <AllMusic />
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

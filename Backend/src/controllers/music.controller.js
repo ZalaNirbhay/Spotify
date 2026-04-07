@@ -1,4 +1,4 @@
-const nusicModel = require("../models/music.model");
+const musicModel = require("../models/music.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
@@ -12,7 +12,7 @@ async function createMusic(req, res) {
 
     const result = await uploadFile(file.buffer.toString("base64"));
 
-    const music = new nusicModel({
+    const music = new musicModel({
       uri: result.url,
       title,
       artist: req.artist.id,
@@ -60,7 +60,18 @@ async function createAlbum(req, res) {
   }
 }
 
+async function getAllMusics(req, res) {
+  try {
+    const musics = await musicModel.find()
+    res.status(200).json({ musics });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   createMusic,
   createAlbum,
+  getAllMusics,
 };
