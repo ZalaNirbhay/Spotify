@@ -55,7 +55,7 @@ const LoginPage = () => {
       <section className="grid w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/20 shadow-[0_28px_90px_rgba(3,8,21,0.55)] backdrop-blur md:grid-cols-[1.1fr_1fr]">
         <div className="relative flex flex-col justify-center gap-4 bg-[linear-gradient(145deg,rgba(30,215,96,0.28),rgba(9,14,25,0.95))] p-9">
           <div className="w-fit rounded-full border border-white/30 px-3 py-1 text-xs font-semibold uppercase tracking-widest">
-            PulseWave
+            Beatflow
           </div>
           <h1 className="font-['Space_Grotesk'] text-4xl font-bold tracking-tight md:text-5xl">
             Feel every beat.

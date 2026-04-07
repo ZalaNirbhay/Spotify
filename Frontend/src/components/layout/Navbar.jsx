@@ -15,7 +15,7 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between px-8 py-4 bg-[#0c1321] border-b border-white/10 text-white shadow-md">
       <div className="flex items-center gap-8">
-        <Link to="/" className="font-bold text-xl text-emerald-400 tracking-wider">PulseWave</Link>
+        <Link to="/" className="font-bold text-xl text-emerald-400 tracking-wider">Beatflow</Link>
         <div className="flex items-center gap-4">
           <Link to="/" className="text-sm font-medium hover:text-emerald-400 transition-colors">Home</Link>
           <Link to="/music" className="text-sm font-medium hover:text-emerald-400 transition-colors">All Music</Link>
