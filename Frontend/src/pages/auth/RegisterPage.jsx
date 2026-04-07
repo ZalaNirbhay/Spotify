@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
-const RegisterPage = ({ onSwitchToLogin }) => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -9,6 +10,7 @@ const RegisterPage = ({ onSwitchToLogin }) => {
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -38,6 +40,7 @@ const RegisterPage = ({ onSwitchToLogin }) => {
       }
 
       setMessage('Account created successfully')
+      setTimeout(() => navigate('/login'), 1500)
     } catch {
       setMessage('Something went wrong. Please try again.')
     } finally {
@@ -140,13 +143,12 @@ const RegisterPage = ({ onSwitchToLogin }) => {
 
           <p className="text-sm text-slate-300">
             Already have an account?{' '}
-            <button
-              type="button"
-              onClick={onSwitchToLogin}
+            <Link
+              to="/login"
               className="font-semibold text-emerald-400 transition hover:text-emerald-300"
             >
               Log in
-            </button>
+            </Link>
           </p>
         </div>
       </section>

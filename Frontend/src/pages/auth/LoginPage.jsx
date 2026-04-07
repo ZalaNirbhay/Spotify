@@ -1,12 +1,17 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
-const LoginPage = ({ onSwitchToRegister }) => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   })
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -35,7 +40,9 @@ const LoginPage = ({ onSwitchToRegister }) => {
         return
       }
 
-      setMessage('Login successful')
+      // Save token and user details to context and local storage
+      login(data.user || data)
+      navigate('/')
     } catch {
       setMessage('Something went wrong. Please try again.')
     } finally {
@@ -107,13 +114,12 @@ const LoginPage = ({ onSwitchToRegister }) => {
 
           <p className="text-sm text-slate-300">
             New here?{' '}
-            <button
-              type="button"
-              onClick={onSwitchToRegister}
+            <Link
+              to="/register"
               className="font-semibold text-emerald-400 transition hover:text-emerald-300"
             >
               Create account
-            </button>
+            </Link>
           </p>
         </div>
       </section>
